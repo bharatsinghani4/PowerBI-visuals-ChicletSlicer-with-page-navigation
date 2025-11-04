@@ -1,6 +1,7 @@
 {
-  "name": "powerbi-visuals-chicletslicer",
+  "name": "@microsoft/powerbi-visuals-chicletslicer",
   "version": "2.2.1.0",
+  "private": true,
   "author": {
     "name": "Microsoft",
     "email": "pbicvsupport@microsoft.com"
