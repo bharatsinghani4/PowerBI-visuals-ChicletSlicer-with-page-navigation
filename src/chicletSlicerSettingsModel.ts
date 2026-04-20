@@ -3,7 +3,7 @@ import { formattingSettings } from "powerbi-visuals-utils-formattingmodel";
 
 import ILocalizationManager = powerbi.extensibility.ILocalizationManager;
 
-import Card = formattingSettings.Card;
+import Card = formattingSettings.SimpleCard;
 import Model = formattingSettings.Model;
 
 import IEnumMember = powerbi.IEnumMember;
@@ -125,44 +125,42 @@ export class GeneralCardSettings extends Card {
     multiselect = new formattingSettings.ToggleSwitch({
         name: "multiselect",
         displayNameKey: "Visual_MultipleSelection",
-        value: true,
-        topLevelToggle: false
+        value: true
     });
 
     forcedSelection = new formattingSettings.ToggleSwitch({
         name: "forcedSelection",
         displayNameKey: "Visual_ForcedSelection",
-        value: false,
-        topLevelToggle: false
+        value: false
     });
 
     name: string = "general";
     displayNameKey: string = "Visual_General";
     slices = [this.orientation, this.columns, this.rows, this.showDisabled, this.multiselect, this.forcedSelection];
 
-    revertToDefaultDescriptors: [
+    revertToDefaultDescriptors = [
         {
-            objectName: "general"
+            objectName: "general",
             propertyName: "orientation"
         },
         {
-            objectName: "general"
+            objectName: "general",
             propertyName: "columns"
         },
         {
-            objectName: "general"
+            objectName: "general",
             propertyName: "rows"
         },
         {
-            objectName: "general"
+            objectName: "general",
             propertyName: "showDisabled"
         },
         {
-            objectName: "general"
+            objectName: "general",
             propertyName: "multiselect"
         },
         {
-            objectName: "general"
+            objectName: "general",
             propertyName: "forcedSelection"
         }
     ]
@@ -175,8 +173,7 @@ export class HeaderCardSettings extends Card {
     show = new formattingSettings.ToggleSwitch({
         name: "show",
         displayNameKey: "Visual_Show",
-        value: true,
-        topLevelToggle: true
+        value: true
     });
 
     title = new formattingSettings.TextInput({
@@ -195,7 +192,7 @@ export class HeaderCardSettings extends Card {
     background = new formattingSettings.ColorPicker({
         name: "background",
         displayNameKey: "Visual_Background",
-        value: { value: null }
+        value: { value: "" }
     });
 
     textSize = new formattingSettings.NumUpDown({
@@ -247,37 +244,37 @@ export class HeaderCardSettings extends Card {
     displayNameKey: string = "Visual_Header";
     slices = [this.show, this.title, this.fontColor, this.background, this.textSize, this.outline, this.outlineColor, this.outlineWeight];
 
-    revertToDefaultDescriptors: [
+    revertToDefaultDescriptors = [
         {
-            objectName: "header"
+            objectName: "header",
             propertyName: "show"
         },
         {
-            objectName: "header"
+            objectName: "header",
             propertyName: "title"
         },
         {
-            objectName: "header"
+            objectName: "header",
             propertyName: "fontColor"
         },
         {
-            objectName: "header"
+            objectName: "header",
             propertyName: "background"
         },
         {
-            objectName: "header"
+            objectName: "header",
             propertyName: "textSize"
         },
         {
-            objectName: "header"
+            objectName: "header",
             propertyName: "outline"
         },
         {
-            objectName: "header"
+            objectName: "header",
             propertyName: "outlineColor"
         },
         {
-            objectName: "header"
+            objectName: "header",
             propertyName: "outlineWeight"
         }
     ]
@@ -306,8 +303,7 @@ export class SlicerTextCardSettings extends Card {
     tailoring = new formattingSettings.ToggleSwitch({
         name: "tailoring",
         displayNameKey: "Visual_Enable_Tailoring",
-        value: false,
-        topLevelToggle: false
+        value: false
     })
 
     height = new formattingSettings.NumUpDown({
@@ -337,7 +333,7 @@ export class SlicerTextCardSettings extends Card {
     background = new formattingSettings.ColorPicker({
         name: "background",
         displayNameKey: "Visual_Background",
-        value: { value: null }
+        value: { value: "" }
     });
 
     transparency = new formattingSettings.Slider({
@@ -419,61 +415,61 @@ export class SlicerTextCardSettings extends Card {
     slices = [this.textSize, this.tailoring, this.height, this.width, this.background, this.transparency, this.selectedColor, this.hoverColor, 
                 this.unselectedColor, this.disabledColor, this.outlineColor, this.outlineWeight, this.fontColor, this.padding, this.borderStyle]
 
-    revertToDefaultDescriptors: [
+    revertToDefaultDescriptors = [
         {
-            objectName: "rows"
+            objectName: "rows",
             propertyName: "textSize"
         },
         {
-            objectName: "rows"
+            objectName: "rows",
             propertyName: "height"
         },
         {
-            objectName: "rows"
+            objectName: "rows",
             propertyName: "width"
         },
         {
-            objectName: "rows"
+            objectName: "rows",
             propertyName: "background"
         },
         {
-            objectName: "rows"
+            objectName: "rows",
             propertyName: "transparency"
         },
         {
-            objectName: "rows"
+            objectName: "rows",
             propertyName: "selectedColor"
         },
         {
-            objectName: "rows"
+            objectName: "rows",
             propertyName: "hoverColor"
         },
         {
-            objectName: "rows"
+            objectName: "rows",
             propertyName: "unselectedColor"
         },
         {
-            objectName: "rows"
+            objectName: "rows",
             propertyName: "disabledColor"
         },
         {
-            objectName: "rows"
+            objectName: "rows",
             propertyName: "outlineColor"
         },
         {
-            objectName: "rows"
+            objectName: "rows",
             propertyName: "outlineWeight"
         },
         {
-            objectName: "rows"
+            objectName: "rows",
             propertyName: "fontColor"
         },
         {
-            objectName: "rows"
+            objectName: "rows",
             propertyName: "padding"
         },
         {
-            objectName: "rows"
+            objectName: "rows",
             propertyName: "borderStyle"
         }
     ]
@@ -500,43 +496,40 @@ export class ImagesCardSettings extends Card {
     imageRound = new formattingSettings.ToggleSwitch({
         name: "imageRound",
         displayNameKey: "Visual_Images_Round",
-        value: false,
-        topLevelToggle: false
+        value: false
     });
 
     stretchImage = new formattingSettings.ToggleSwitch({
         name: "stretchImage",
         displayNameKey: "Visual_Images_Stretch",
-        value: false,
-        topLevelToggle: false
+        value: false
     });
 
     bottomImage = new formattingSettings.ToggleSwitch({
         name: "bottomImage",
         displayNameKey: "Visual_Images_Bottom",
-        value: false,
-        topLevelToggle: false
+        value: false
     });
 
     name: string = "images";
     displayNameKey: string = "Visual_Images";
     slices = [this.imageSplit, this.imageRound, this.stretchImage, this.bottomImage];
 
-    revertToDefaultDescriptors: [
+    revertToDefaultDescriptors = [
         {
-            objectName: "images"
+            objectName: "images",
             propertyName: "imageSplit"
         },
         {
-            objectName: "images"
+            objectName: "images",
             propertyName: "imageRound"
         },
         {
-            objectName: "images"
+            objectName: "images",
             propertyName: "stretchImage"
         },
         {
-            objectName: "images"
+            objectName: "images",
             propertyName: "bottomImage"
         }
     ]
@@ -547,17 +540,16 @@ export class TooltipsCardSettings extends Card {
     show = new formattingSettings.ToggleSwitch({
         name: "show",
         displayNameKey: "Visual_Show",
-        value: false,
-        topLevelToggle: true
+        value: false
     });
 
     name: string = "tooltips";
     displayNameKey: string = "Visual_Tooltips";
     slices = [this.show];
 
-    revertToDefaultDescriptors: [
+    revertToDefaultDescriptors = [
         {
-            objectName: "tooltips"
+            objectName: "tooltips",
             propertyName: "show"
         }
     ]

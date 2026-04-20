@@ -40,7 +40,7 @@ import { ChicletSlicerDataPoint } from "./interfaces";
 import { Orientation } from "./interfaces";
 
 export interface ITableView {
-    data(data: any[], dataIdFunction: (d) => any, dataAppended: boolean): ITableView;
+    data(data: any[], dataIdFunction: (d: any) => any, dataAppended: boolean): ITableView;
     rowHeight(rowHeight: number): ITableView;
     columnWidth(columnWidth: number): ITableView;
     orientation(orientation: string): ITableView;
@@ -88,16 +88,16 @@ export class TableView implements ITableView {
     private static defaultRowHeight = 0;
     private static defaultColumns = 1;
 
-    private getDatumIndex: (d: any) => any;
-    private _data: any[];
-    private _totalRows: number;
-    private _totalColumns: number;
+    private _data: any[] = [];
+    private _totalRows: number | undefined;
+    private _totalColumns: number | undefined;
 
     private options: TableViewViewOptions;
     private visibleGroupContainer: Selection<any>;
     private scrollContainer: Selection<any>;
 
-    private computedOptions: TableViewComputedOptions;
+    private computedOptions: TableViewComputedOptions | undefined;
+    private getDatumIndex!: (d: any) => any;
 
     public constructor(options: TableViewViewOptions) {
         // make a copy of options so that it is not modified later by caller
@@ -162,7 +162,7 @@ export class TableView implements ITableView {
         return this;
     }
 
-    public data(data: any[], getDatumIndex: (d) => any, dataReset: boolean = false): ITableView {
+    public data(data: any[], getDatumIndex: (d: any) => any, dataReset: boolean = false): ITableView {
         this._data = data;
         this.getDatumIndex = getDatumIndex;
 
@@ -241,11 +241,11 @@ export class TableView implements ITableView {
             totalColumns = n;
         } else if (this.options.orientation === Orientation.HORIZONTAL) {
             if (totalRows === 0) {
-                totalRows = this._totalRows;
+                totalRows = this._totalRows!;
             }
 
             if (totalColumns === 0) {
-                totalColumns = this._totalColumns;
+                totalColumns = this._totalColumns!;
             }
         }
 

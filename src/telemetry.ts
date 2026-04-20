@@ -29,7 +29,7 @@ export class ExternalLinksTelemetry {
         }
     }
 
-    public static containsExternalURL(url: string | null): boolean {
-        return /^(ftp|https|http):\/\/[^ "]+$/.test(url);
+    public static containsExternalURL(url: string | null | undefined): boolean {
+        return typeof url === "string" && /^(ftp|https|http):\/\/[^ "]+$/.test(url);
     }
 }

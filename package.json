@@ -18,13 +18,14 @@
     "eslint": "npx eslint . --ext .js,.jsx,.ts,.tsx",
     "pretest": "pbiviz package --resources --no-minify --no-pbiviz",
     "test": "karma start",
-    "cert": "pbiviz --install-cert"
+    "cert": "pbiviz install-cert"
   },
   "devDependencies": {
     "@types/d3-array": "^3.0.7",
     "@types/d3-selection": "^3.0.6",
     "@types/jasmine": "^4.3.5",
     "@types/karma": "^6.3.4",
+    "@types/lodash.sortby": "^4.7.9",
     "@types/webpack": "^5.28.2",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "css-loader": "^6.8.1",
@@ -56,7 +57,7 @@
     "lodash.sortby": "^4.7.0",
     "lodash.take": "^4.1.1",
     "lodash.takeright": "^4.1.1",
-    "powerbi-models": "^1.12.6",
+    "powerbi-models": "^2.0.1",
     "powerbi-visuals-api": "~5.4.0",
     "powerbi-visuals-utils-colorutils": "^6.0.1",
     "powerbi-visuals-utils-dataviewutils": "^6.0.1",

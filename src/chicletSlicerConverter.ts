@@ -41,11 +41,11 @@ import { ChicletSlicerDataPoint } from "./interfaces";
 
 export class ChicletSlicerConverter {
     private dataViewCategorical: DataViewCategorical;
-    private category: DataViewCategoryColumn;
-    private image: DataViewCategoryColumn;
-    private categoryIdentities: CustomVisualOpaqueIdentity[];
-    private categoryValues: any[];
-    private categoryFormatString: string;
+    private category: DataViewCategoryColumn | undefined;
+    private image: DataViewCategoryColumn | undefined;
+    private categoryIdentities: CustomVisualOpaqueIdentity[] | undefined;
+    private categoryValues: any[] | undefined;
+    private categoryFormatString: string | undefined;
 
     public dataPoints: ChicletSlicerDataPoint[];
 
@@ -53,7 +53,7 @@ export class ChicletSlicerConverter {
     private jsonFilters: IFilter[] | any[];
 
     public constructor(dataView: DataView, host: IVisualHost, jsonFilters: IFilter[] | any[]) {
-        const dataViewCategorical: DataViewCategorical = dataView.categorical;
+        const dataViewCategorical: DataViewCategorical = dataView.categorical ? dataView.categorical : <DataViewCategorical>{};
         this.dataViewCategorical = dataViewCategorical;
         this.host = host;
         this.jsonFilters = jsonFilters;
@@ -81,16 +81,17 @@ export class ChicletSlicerConverter {
             let value: number = -Infinity;
 
             for (let categoryIndex: number = 0; categoryIndex < this.categoryValues.length; categoryIndex++) {
-                const identityIndex: number = (<any>this.categoryIdentities[categoryIndex]).identityIndex;
+                const identityIndex: number = (<any>this.categoryIdentities![categoryIndex]).identityIndex;
                 const categoryIsSelected = (hasSelection && this.jsonFilters[0].target.includes(identityIndex)) ? true : false;
                 let selectable: boolean = true;
 
                 const categoryValue: any = this.categoryValues[categoryIndex], categoryLabel: string = valueFormatter.format(categoryValue, this.categoryFormatString);
-                let imageURL: string = '';
-                if (this.dataViewCategorical.values) {
+                let imageURL: string | undefined = '';
+                const values = dataViewCategorical.values;
+                if (values) {
                     // Series are either measures in the multi-measure case, or the single series otherwise
-                    for (let seriesIndex: number = 0; seriesIndex < this.dataViewCategorical.values.length; seriesIndex++) {
-                        const seriesData: any = dataViewCategorical.values[seriesIndex];
+                    for (let seriesIndex: number = 0; seriesIndex < values.length; seriesIndex++) {
+                        const seriesData: any = values[seriesIndex];
                         if (seriesData.values[categoryIndex] != null) {
                             value = <number>seriesData.values[categoryIndex];
                             if (seriesData.highlights) {
@@ -110,7 +111,7 @@ export class ChicletSlicerConverter {
                 }
 
                 const categorySelectionId: ISelectionId = this.host.createSelectionIdBuilder()
-                    .withCategory(this.category, categoryIndex).createSelectionId();
+                    .withCategory(this.category!, categoryIndex).createSelectionId();
                 this.dataPoints.push({
                     identity: <powerbi.visuals.ISelectionId>categorySelectionId,
                     category: categoryLabel,
@@ -119,7 +120,7 @@ export class ChicletSlicerConverter {
                     selected: categoryIsSelected,
                     selectable: selectable,
                     id: categoryIndex,
-                    columnName: this.category.source.displayName
+                    columnName: this.category!.source.displayName
                 });
             }
         }

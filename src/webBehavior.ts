@@ -52,18 +52,18 @@ export interface ChicletSlicerBehaviorOptions {
 }
 
 export class ChicletSlicerWebBehavior {
-    private slicers: Selection<any>;
-    private slicerItemLabels: Selection<any>;
-    private slicerItemInputs: Selection<any>;
-    private formattingSettings: ChicletSlicerSettingsModel;
-    private options: ChicletSlicerBehaviorOptions;
-    private visualHost: IVisualHost;
+    private slicers: Selection<any> | undefined;
+    private slicerItemLabels: Selection<any> | undefined;
+    private slicerItemInputs: Selection<any> | undefined;
+    private formattingSettings: ChicletSlicerSettingsModel | undefined;
+    private options: ChicletSlicerBehaviorOptions | undefined;
+    private visualHost: IVisualHost | undefined;
     private jsonFilters: IFilter[] | undefined | any;
 
     /**
      * Public for testability.
      */
-    public dataPoints: ChicletSlicerDataPoint[];
+    public dataPoints: ChicletSlicerDataPoint[] = [];
 
     public bindEvents(options: ChicletSlicerBehaviorOptions): void {
         const slicers: Selection<any> = this.slicers = options.slicerItemContainers,
@@ -102,21 +102,20 @@ export class ChicletSlicerWebBehavior {
             }
             (<MouseEvent>event).preventDefault();
 
-            const index = dataPoint.id;
+            const index = dataPoint.id as number;
 
-            const settings: ChicletSlicerSettingsModel = this.formattingSettings;
+            const settings: ChicletSlicerSettingsModel = this.formattingSettings!;
             const multiselect: boolean = settings.generalCardSettings.multiselect.value;
 
             const selectedIndexes: number[] = this.dataPoints
-                .filter((dataPoint: ChicletSlicerDataPoint) => dataPoint.selected)
-                .map(dataPoint => dataPoint.id); // id guarantees correct order in category array
+                .filter((dataPoint: ChicletSlicerDataPoint) => dataPoint.selected && dataPoint.id !== undefined)
+                .map(dataPoint => dataPoint.id as number); // id guarantees correct order in category array
 
             if (settings.generalCardSettings.forcedSelection.value && selectedIndexes.length === 1) {
-                const availableDataPoints: ChicletSlicerDataPoint[] = this.dataPoints.map((dataPoint: ChicletSlicerDataPoint) => {
-                    if (!dataPoint.filtered) {
-                        return dataPoint;
-                    }
+                const availableDataPoints: ChicletSlicerDataPoint[] = this.dataPoints.filter((dataPoint: ChicletSlicerDataPoint) => {
+                    return !dataPoint.filtered;
                 });
+
 
                 if (availableDataPoints[index]
                     && this.dataPoints[selectedIndexes[0]].identity === availableDataPoints[index].identity) {
@@ -132,7 +131,7 @@ export class ChicletSlicerWebBehavior {
                 let startIndex: number = selectedIndexes.length > 0
                     ? (selectedIndexes[selectedIndexes.length - 1])
                     : 0;
-                let endIndex = dataPoint.id;
+                let endIndex = dataPoint.id as number;
 
                 // reverse selection
                 if (startIndex > endIndex) {
@@ -140,7 +139,7 @@ export class ChicletSlicerWebBehavior {
                 }
 
                 for (const dp of this.dataPoints) {
-                    if (dp.id < startIndex || dp.id > endIndex) {
+                    if (dp.id as number < startIndex || dp.id as number > endIndex) {
                         dp.selected = false;
                     }
                     else {
@@ -160,7 +159,7 @@ export class ChicletSlicerWebBehavior {
         });
 
         slicerClear.on("click", () => {
-            const settings: ChicletSlicerSettingsModel = this.formattingSettings;
+            const settings: ChicletSlicerSettingsModel = this.formattingSettings!;
 
             if (settings.generalCardSettings.forcedSelection.value) {
                 return false;
@@ -214,9 +213,10 @@ export class ChicletSlicerWebBehavior {
     }
 
     private saveSelection(): void {
-        const filterTargets: IIdentityFilterTarget = this.dataPoints
-            .filter(d => d.selected)
-            .map(d => d.id);
+        const filterTargets: number[] = this.dataPoints
+            .filter(d => d.selected && d.id !== undefined)
+            .map(d => d.id as number); 
+
 
         // Selection manager stores selection ids in the order in which they are selected by the user.
         // This is needed because data should be sent to the host in the same order that the user selected.
@@ -232,13 +232,13 @@ export class ChicletSlicerWebBehavior {
             target: sortedTargers
         }
 
-        this.visualHost.applyJsonFilter(filter, "general", "filter", FilterAction.merge);
+        this.visualHost!.applyJsonFilter(filter, "general", "filter", FilterAction.merge);
     }
 
     public static sortByJSONFilterTarget(selected, jsonFilters: number[]): number[] {
         const reversed = jsonFilters.reverse();
 
-        function compareIndexes(a, b: number) {
+        function compareIndexes(a: number, b: number) {
             return reversed.indexOf(b) - reversed.indexOf(a);
         }
         return selected.toSorted(compareIndexes);

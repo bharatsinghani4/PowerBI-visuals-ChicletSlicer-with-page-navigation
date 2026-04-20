@@ -91,25 +91,25 @@ const enum ChicletSlicerShowDisabled {
 }
 export class ChicletSlicer implements IVisual {
     private root: Selection<any>;
-    private searchHeader: Selection<any>;
-    private searchInput: Selection<any>;
-    private currentViewport: IViewport;
-    private slicerHeader: Selection<any>;
-    private slicerBody: Selection<any>;
-    private tableView: ITableView;
+    private searchHeader!: Selection<any>;
+    private searchInput!: Selection<any>;
+    private currentViewport!: IViewport;
+    private slicerHeader!: Selection<any>;
+    private slicerBody!: Selection<any>;
+    private tableView!: ITableView;
 
-    public formattingSettings: ChicletSlicerSettingsModel;
+    public formattingSettings!: ChicletSlicerSettingsModel;
 
     private visualHost: IVisualHost;
 
     private colorPalette: IColorPalette;
     private colorHelper: ColorHelper;
 
-    private jsonFilters: IFilter[] | any[];
+    private jsonFilters!: IFilter[] | any[];
     private tooltipService: ITooltipServiceWrapper;
 
     private localizationManager: ILocalizationManager;
-    private resetScrollbarPosition: boolean;
+    private resetScrollbarPosition!: boolean;
 
     /**
      * It's public for testability.
@@ -154,7 +154,7 @@ export class ChicletSlicer implements IVisual {
     public static BodySelector: ClassAndSelector = createClassAndSelector('slicerBody');
 
     private telemetry: ExternalLinksTelemetry;
-    private renderFiltered: (searchText: string) => void;
+    private renderFiltered: ((searchText: string) => void) | null = null;
 
 
 
@@ -199,12 +199,12 @@ export class ChicletSlicer implements IVisual {
 
         // reassign filters only when data update 
         if (options.type & powerbi.VisualUpdateType.Data) {
-            this.jsonFilters = options.jsonFilters;
+            this.jsonFilters = options.jsonFilters || [];
         }
         if (this.jsonFilters && this.jsonFilters[0] && this.jsonFilters[0]?.target.length === 0) {
             this.resetScrollbarPosition = true;
         }
-        this.formattingSettings = this.formattingSettingsService.populateFormattingSettingsModel(ChicletSlicerSettingsModel, options.dataViews);
+        this.formattingSettings = this.formattingSettingsService.populateFormattingSettingsModel(ChicletSlicerSettingsModel, options.dataViews[0]);
 
         // orientation bug fix (v2.1.9)
         const orientationValue = options.dataViews[0].metadata.objects?.general?.orientation;
@@ -215,7 +215,7 @@ export class ChicletSlicer implements IVisual {
         
         this.formattingSettings.setLocalizedOptions(this.localizationManager);
 
-        const slicerData: ChicletSlicerData = ChicletSlicer.converter(
+        const slicerData: ChicletSlicerData | undefined = ChicletSlicer.converter(
             options.dataViews[0],
             this?.searchInput?.node()?.value,
             this.formattingSettings,
@@ -247,7 +247,7 @@ export class ChicletSlicer implements IVisual {
     /**
      * Public to testability.
      */
-    public static getValidImageSplit(imageSplit): number {
+    public static getValidImageSplit(imageSplit: number): number {
         if (imageSplit < ChicletSlicer.MinImageSplit) {
             return ChicletSlicer.MinImageSplit;
         } else if (imageSplit > ChicletSlicer.MaxImageSplit) {
@@ -262,8 +262,8 @@ export class ChicletSlicer implements IVisual {
         searchText: string,
         formattingSettings: ChicletSlicerSettingsModel,
         visualHost: IVisualHost,
-        jsonFilters: IFilter[] | any[]): ChicletSlicerData {
-        const categories: DataViewCategoryColumn = dataView?.categorical?.categories?.length && dataView.categorical.categories[0];
+        jsonFilters: IFilter[] | any[]): ChicletSlicerData | undefined {
+        const categories: DataViewCategoryColumn | undefined = dataView?.categorical?.categories?.[0];
 
         if (!categories?.source?.roles ||
             !categories.source.roles["Category"] ||
@@ -294,7 +294,7 @@ export class ChicletSlicer implements IVisual {
 
     public static filterDataPoints(dataPoints: ChicletSlicerDataPoint[], searchText: string): ChicletSlicerDataPoint[] {
         searchText = searchText.toLowerCase();
-        dataPoints.forEach(x => x.filtered = x.category.toLowerCase().indexOf(searchText) < 0);
+        dataPoints.forEach(x => x.filtered = !x.category || x.category.toLowerCase().indexOf(searchText) < 0);
         return dataPoints;
     }
 
@@ -431,7 +431,7 @@ export class ChicletSlicer implements IVisual {
             }];
         }
 
-        return null;
+        return [];
     }
 
     private initContainer() {
@@ -592,21 +592,23 @@ export class ChicletSlicer implements IVisual {
             rowSelection
                 .selectAll(ChicletSlicer.SlicerImgWrapperSelector.selectorName)
                 .style("max-height", settings.imagesCardSettings.imageSplit.value + '%')
-                .style("display", (dataPoint: ChicletSlicerDataPoint) => (dataPoint.imageURL) ? 'flex' : 'none')
-                .classed("hidden", (dataPoint: ChicletSlicerDataPoint) => {
+                .style("display", (dataPoint: any) => (dataPoint.imageURL) ? 'flex' : 'none')
+                .classed("hidden", (dataPoint: any) => {
                     if (!(dataPoint.imageURL)) { return true; }
                     if (settings.imagesCardSettings.imageSplit.value < ChicletSlicer.MinImageSplitToHide) { return true; }
+                    return false;
                 })
                 .classed("imageRound", settings.imagesCardSettings.imageRound.value).classed("stretchImage", settings.imagesCardSettings.stretchImage.value)
-                .classed("bottomImage", settings.imagesCardSettings.bottomImage.value).attr("src", (d: ChicletSlicerDataPoint) => { return d.imageURL ? d.imageURL : ''; });
+                .classed("bottomImage", settings.imagesCardSettings.bottomImage.value).attr("src", (d: any) => { return d.imageURL ? d.imageURL : ''; });
             rowSelection.selectAll(ChicletSlicer.SlicerTextWrapperSelector.selectorName)
-                .style('height', (d: ChicletSlicerDataPoint): string => {
+                .style('height', (d: any): string => {
                     let height: number = ChicletSlicer.MaxImageSplit;
                     if (d.imageURL) { height -= settings.imagesCardSettings.imageSplit.value; }
                     return `${height}%`;
                 })
                 .classed('hidden', () => {
                     if (settings.imagesCardSettings.imageSplit.value > ChicletSlicer.MaxImageSplitToHide) { return true; }
+                    return false;
                 });
             rowSelection.selectAll(ChicletSlicer.ItemContainerSelector.selectorName)
                 .style("color", settings.slicerTextCardSettings.fontColor.value.value).style("border-style", ChicletSlicer.getBorderStyle(settings.slicerTextCardSettings.outline))
