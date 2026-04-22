@@ -340,6 +340,15 @@
                     }
                 }
             }
+        },
+        "pageNavigation": {
+            "properties": {
+                "enablePageNavigation": {
+                    "type": {
+                        "bool": true
+                    }
+                }
+            }
         }
     },
     "supportsHighlight": true,

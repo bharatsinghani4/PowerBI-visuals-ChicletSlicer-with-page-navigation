@@ -34,6 +34,12 @@ const borderStyleOptions: IEnumMember[] = [
     { displayName: "Visual_OutlineStyle_Square", value: "Square" },
 ]
 
+const navigationModeOptions: IEnumMember[] = [
+    { displayName: "Visual_NavigationMode_Brand", value: "brand" },
+    { displayName: "Visual_NavigationMode_Category", value: "category" },
+    { displayName: "Visual_NavigationMode_Custom", value: "custom" }
+]
+
 class ColumnsSettings {
     public static readonly DefaultValue: number = 3;
     public static readonly MinValue: number = 0;
@@ -572,6 +578,25 @@ export class HeaderText extends Card {
     public marginLeft: number = 0;
 }
 
+export class PageNavigationCardSettings extends Card {
+    enablePageNavigation = new formattingSettings.ToggleSwitch({
+        name: "enablePageNavigation",
+        displayNameKey: "Visual_EnablePageNavigation",
+        value: false
+    });
+
+    name: string = "pageNavigation";
+    displayNameKey: string = "Visual_PageNavigation";
+    slices = [this.enablePageNavigation];
+
+    revertToDefaultDescriptors = [
+        {
+            objectName: "pageNavigation",
+            propertyName: "enablePageNavigation"
+        }
+    ]
+}
+
 export class ChicletSlicerSettingsModel extends Model {
     generalCardSettings = new GeneralCardSettings();
     headerCardSettings = new HeaderCardSettings();
@@ -581,14 +606,16 @@ export class ChicletSlicerSettingsModel extends Model {
     slicerItemContainer = new SlicerItemContainer();
     margin = new Margin();
     headerText = new HeaderText();
+    pageNavigationCardSettings = new PageNavigationCardSettings();
 
-    cards = [this.generalCardSettings, this.headerCardSettings, this.slicerTextCardSettings, this.imagesCardSettings, this.tooltipsCardSettings];
+    cards = [this.generalCardSettings, this.headerCardSettings, this.slicerTextCardSettings, this.imagesCardSettings, this.tooltipsCardSettings, this.pageNavigationCardSettings];
 
     setLocalizedOptions(localizationManager: ILocalizationManager) {
         this.setLocalizedDisplayName(borderStyleOptions, localizationManager);
         this.setLocalizedDisplayName(orientationOptions, localizationManager);
         this.setLocalizedDisplayName(outlineOptions, localizationManager);
         this.setLocalizedDisplayName(showDisabledOptions, localizationManager);
+        this.setLocalizedDisplayName(navigationModeOptions, localizationManager);
     }
 
     public static getOldOrientationSettings(orientationValue: number, localizationManager?: ILocalizationManager): IEnumMember {

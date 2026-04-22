@@ -8,9 +8,8 @@
     "target": "ES6",
     "sourceMap": true,
     "outDir": "./.tmp/build/",
-    "rootDir": "./src",
     "moduleResolution": "node",
-    "ignoreDeprecations": "6.0",
+    "ignoreDeprecations": "5.0",
     "typeRoots": [
       "./node_modules/@types"
     ],

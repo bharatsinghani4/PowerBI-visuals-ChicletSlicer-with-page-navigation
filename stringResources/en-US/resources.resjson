@@ -51,5 +51,7 @@
 	"Visual_show": "Show",
 	"Visual_Description_Transparency": "Set transparency for background color",
 	"Visual_Tooltips": "Tooltips",
-	"Visual_Enable_Tailoring": "Crop text"
+	"Visual_Enable_Tailoring": "Crop text",
+    "Visual_EnablePageNavigation": "Enable Page Navigation",
+    "Visual_PageNavigation": "Page Navigation"
 }

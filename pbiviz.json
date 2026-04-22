@@ -1,18 +1,18 @@
 {
   "visual": {
-    "name": "chicletSlicer",
-    "displayName": "ChicletSlicer 2.2.1.0",
-    "guid": "ChicletSlicer1448559807354",
-    "visualClassName": "ChicletSlicer",
-    "version": "2.2.1.0",
-    "description": "Use this slicer to display image and/or text buttons that act as an in-canvas filter. Define additional properties for the layout & selection to customize this slicer to meet your specific needs",
+    "name": "chicletSlicerWithPageNavigation",
+    "displayName": "ChicletSlicer with Page Navigation 1.0.0",
+    "guid": "ChicletSlicerWithPageNavigation52393462899234",
+    "visualClassName": "ChicletSlicerWithPageNavigation",
+    "version": "1.0.0.0",
+    "description": "Use this slicer to display image and/or text buttons that act as an in-canvas filter. Define additional properties for the layout & selection to customize this slicer to meet your specific needs. This version includes page navigation functionality.",
     "supportUrl": "https://community.powerbi.com",
-    "gitHubUrl": "https://github.com/Microsoft/PowerBI-visuals-ChicletSlicer"
+    "gitHubUrl": "https://github.com/bharatsinghani4/PowerBI-visuals-ChicletSlicer-with-page-navigation"
   },
   "apiVersion": "5.4.0",
   "author": {
-    "name": "Microsoft",
-    "email": "pbicvsupport@microsoft.com"
+    "name": "Bharat Singhani",
+    "email": "bharat.singhani4@evalueserve.com"
   },
   "assets": {
     "icon": "assets/icon.png"

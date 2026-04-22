@@ -53,3 +53,16 @@ export const enum Orientation {
     HORIZONTAL = 'Horizontal',
     VERTICAL = 'Vertical'
 }
+
+export interface PageNavigationSettings {
+    enablePageNavigation: boolean;
+}
+
+export interface BrandPageMapping {
+    [key: string]: string; // brand name -> page name
+}
+
+export interface NavigationTarget {
+    pageName: string;
+    filterState?: any;
+}
